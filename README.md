@@ -62,6 +62,68 @@ Implement data quality checks
 Add monitoring and alerting
 Improve schema evolution handling
 
+## Implementation Notes
+https://excalidraw.com/#json=L_Ac5d2-GQ8BcgHHS9ZGx,AFTFvICAhLyWfcyZ4lh47A
+
+METASTORE ----> Stores all data in a particular region. Each region must have one metastore
+UNITY CATALOG ----> When you create Azure Databricks, it creates a UC by default. The downside is that you might not know how it works, so create one yoirself.
+We use Unity Catalogue to govern data that goes btwn Azure storage and Databricks
+Unity Catalog is only attached to Databricks, so we need to give it access (Access Connector) to Azure storage account that we created.
+UC cannot access AS by default, therefore we need to create a member that can be given a role in order to access AS.
+This is called an Access Connector, which can connect DB to AS.
+We start by creating a container in Azure titled METASTORE (1:17:19) This is where data of the region can be stored.
+
+Access Connector for Azure Databricks ----> Create an Access Connector.
+We need the Access connector to give Databricks Unity Catalog access to our Azure Storage Account. 
+To do this, go to Azure Storage Account and click on Access Control(IAM) and Add Role Assignment.
+Now give access to the Access Connector that was created (Storage Blob contributor).
+Create a Unity Catalog Metastore - azure
+Create a metastore, which is the top level container for Unity Catalogue.
+Create another meta store where extracted data goes into.
+Create a new UC from databricks
+
+RESOURCE GROUP
+STORAGE ACCOUNT (create containers for medallion)
+DATABRICKS
+ACCESS CONNECTOR
+
+Now is the time to give DATABRICKS (cryptobricks) access to the STORAGE ACCOUNT (cryptostorage).
+
+Go to SA and select Access Control (IAM) and ADD ROLE ASSIGNMENT, then give access to the Connector (storage blob data contributor)
+This will enable the Access Connector access to the data storage resource to be able to read, write, and delete data.
+
+Click Managed identity and Select Member - Choose Access Connector for Azure Databricks and select the Access Connector you created.
+
+SETUP UNITY CATALOG FROM AZURE
+Copy your Microsoft Entra ID from Azure and login to azure databricks account.
+
+CREATE A NEW META STORE - Only one meta store is allowed for each region.
+We created a new meta store bcos we need full access to manage it. 
+#Select your container name and storage name from Azure as highlighted in Databricks when you try to create a new metastore.
+
+Go to Resource Connector created in Azure and copy the Resource ID.
+Paste the Resource ID under Databricks Access Connector ID.
+
+ONCE THIS IS DONE, CREATE CREDENTIALS.
+SETUP EXTERNAL LOCATION - Creating a path where databricks UN has control.
+EXTERNAL DATA  --> CREATE EXTERNAL LOCATION (connect the path where we created.)
+
+SEND YOUR WORK TO GITHUB. 
+Select Workspace, your_folder
+
+Ensure you create cedentials before you create  external location.
+AUTOLOADER
+We use Autoloader to update our data for silver container. Start by importing dependencies
+Go to Catalogue and create external location for Silver and schema.
+
+CREATE A NEW DATABRICKS AND ASSIGN TO YOUR WORKSPACE
+
+CATALOG ---> WORKSPACE ---> ASSIGN TO WORKSPACE
+
+Spark cannot work with inconsistent data. So the data must be loaded with pandas which does automatic
+transformation before loading to Spark.
+
+
 # Author
 Fortune Erhivwor
 Data Engineer
