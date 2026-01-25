@@ -62,6 +62,6 @@ Implement data quality checks
 Add monitoring and alerting
 Improve schema evolution handling
 
-## Author
-Fortune
+# Author
+Fortune Erhivwor
 Data Engineer
