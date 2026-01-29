@@ -1,3 +1,7 @@
+## Architecture Diagram
+
+![Project Architecture](images/architecture_diagram.png)
+
 # Project Title
 Designing a Scalable Cryptocurrency Data Pipeline Using  Azure Blob Storage, Databricks Autoloader, and Delta  Lake.
 
